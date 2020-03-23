@@ -5,6 +5,7 @@ var bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const PORT = process.env.PORT || 3000
 const authRoute = require('./routes/auth')
+const postRoute = require('./routes/posts')
 const dotenv = require('dotenv')
 
 dotenv.config();
@@ -17,4 +18,5 @@ mongoose.connect(process.env.DB_CONNECT, {
 app.use(express.json())
 
 app.use('/api/user', authRoute)
+app.use('/api/posts', postRoute)
 app.listen(PORT, () => console.log("Server Up and Running"))
