@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 var bodyParser = require('body-parser')
 const mongoose = require('mongoose');
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 const authRoute = require('./routes/auth')
 const postRoute = require('./routes/posts')
 const dotenv = require('dotenv')
@@ -15,7 +15,8 @@ mongoose.connect(process.env.DB_CONNECT, {
     useUnifiedTopology: true
 }, () => console.log("Connected to DB"));
 
-app.use(express.json())
+// app.use(express.json())
+app.use(express.urlencoded({extended : false}))
 
 app.use('/api/user', authRoute)
 app.use('/api/posts', postRoute)
