@@ -19,16 +19,6 @@ module.exports = {
             const results = await cursor.toArray();
             module.exports.results = results
 
-            if (results.length > 0) {
-
-                console.log(`Found a listing in the collection '${collection}'`);
-                results.forEach((result, i) => {
-                    console.log(result);
-
-                });
-            } else {
-                console.log(`Didn't found a listing in the collection '${collection}'`);
-            }
         };
 
         await client.connect()
