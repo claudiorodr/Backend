@@ -8,28 +8,59 @@ const client = new MongoClient(uri, {
 })
 
 module.exports = {
-    list: async function () {
-        async function listDatabases() {
-            databasesList = await client.db().admin().listDatabases();
+    list: async function (collection) {
+        async function listListing(client) {
 
-            console.log("Databases:");
-            databasesList.databases.forEach(db => console.log(` - ${db.name}`))
+            const cursor = await client.db("test").collection(collection).find({}, {
+
+            });
+
+            const results = await cursor.toArray();
+
+            if (results.length > 0) {
+
+                console.log(`Found a listing in the collection '${collection}'`);
+                results.forEach((result, i) => {
+                    console.log(result);
+
+                });
+            } else {
+                console.log(`Didn't found a listing in the collection '${collection}'`);
+
+            }
         };
 
-        try {
-            await client.connect()
+        await client.connect()
+        await listListing(client)
+    },
+    sort: async function (collection,field) {
+        async function listListing(client) {
 
-            await listDatabases(client)
+            const cursor = await client.db("test").collection(collection).find({}).sort({
+                field: -1
+            });
 
-        } catch (e) {
-            console.error(e)
-        } finally {
-            await client.close()
-        }
+            const results = await cursor.toArray();
+
+            if (results.length > 0) {
+
+                console.log(`Found a listing in the collection '${collection}'`);
+                results.forEach((result, i) => {
+                    console.log(result);
+
+                });
+            } else {
+                console.log(`Didn't found a listing in the collection '${collection}'`);
+
+            }
+        };
+
+        await client.connect()
+        await listListing(client)
     },
     insert: async function (collection, data) {
         async function createListing() {
-            const result = await client.db("DishWay").collection(collection).insertOne(data);
+            const result = await client.db("test").collection(collection).insertOne(data);
             console.log(`New listing created with the following id: ${result.insertedId}`);
         };
 
@@ -44,7 +75,7 @@ module.exports = {
     },
     insertMany: async function (collection, data) {
         async function createListing() {
-            const result = await client.db("DishWay").collection(collection).insertMany(data);
+            const result = await client.db("test").collection(collection).insertMany(data);
 
             console.log(`${result.insertedCount} new listing(s) created with the following id(s):`);
             console.log(result.insertedIds);
@@ -63,11 +94,11 @@ module.exports = {
         }
     },
     findOne: async function (collection, field, search) {
-        
-        async function readListing() {          
-            
-            const result = await client.db("DishWay").collection(collection).findOne({
-                [field] : search
+
+        async function readListing() {
+
+            const result = await client.db("test").collection(collection).findOne({
+                [field]: search
             });
             if (result) {
                 console.log(`Found a listing in the collection with the '${field}' '${search}':`);
@@ -88,28 +119,30 @@ module.exports = {
         }
     },
     find: async function (collection, field, search) {
-        
-        async function readListing() {
-            
-            const result = await client.db("DishWay").collection(collection).find({
-                [field] : search
+
+        async function readListing(client) {
+
+            const cursor = await client.db("test").collection(collection).find({
+                [field]: search
+            }, {
+                // "restaurant.id": 1
             });
-            if (result) {
+
+            const results = await cursor.toArray();
+
+            if (results.length > 0) {
+
                 console.log(`Found a listing in the collection with the '${field}' '${search}':`);
-                console.log(result);
+                results.forEach((result, i) => {
+                    console.log(result);
+
+                });
             } else {
                 console.log(`No listings found with '${field}' : '${search}'`);
-                console.log(result);
             }
         };
 
-        try {
-            await client.connect()
-            await readListing(client)
-        } catch (e) {
-            console.error(e)
-        } finally {
-            await client.close()
-        }
-    },
+        await client.connect()
+        await readListing(client)
+    }
 };

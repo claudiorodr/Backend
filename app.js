@@ -1,13 +1,14 @@
 var bd = require('./connection')
 const express = require('express')
-const app = express()
-var bodyParser = require('body-parser')
+// var bodyParser = require('body-parser')
 const mongoose = require('mongoose');
-const PORT = process.env.PORT || 3001
 const authRoute = require('./routes/auth')
 const postRoute = require('./routes/posts')
+const restaurantsRoute = require('./routes/restaurants')
 const dotenv = require('dotenv')
+const PORT = process.env.PORT || 3001
 
+const app = express()
 dotenv.config();
 
 mongoose.connect(process.env.DB_CONNECT, {
@@ -15,9 +16,12 @@ mongoose.connect(process.env.DB_CONNECT, {
     useUnifiedTopology: true
 }, () => console.log("Connected to DB"));
 
-// app.use(express.json())
-app.use(express.urlencoded({extended : false}))
+app.use(express.json())
+app.use(express.urlencoded({
+    extended: false
+}))
 
 app.use('/api/user', authRoute)
 app.use('/api/posts', postRoute)
+app.use('/api/restaurants', restaurantsRoute)
 app.listen(PORT, () => console.log("Server Up and Running"))

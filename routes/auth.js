@@ -44,7 +44,7 @@ router.post('/login', async function (req, res) {
     const {
         error
     } = loginValidation(req.body)
-    
+
     if (error) {
         return res.status(400).send(error.details[0].message)
     }
