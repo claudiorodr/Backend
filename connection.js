@@ -11,11 +11,13 @@ module.exports = {
     list: async function (collection) {
         async function listListing(client) {
 
-            const cursor = await client.db("test").collection(collection).find({}, {
-
+            const cursor = await client.db("test").collection(collection).find({}).project({
+                "restaurant.id": 1,
+                "restaurant.name": 1,
             });
 
             const results = await cursor.toArray();
+            module.exports.results = results
 
             if (results.length > 0) {
 
@@ -26,21 +28,25 @@ module.exports = {
                 });
             } else {
                 console.log(`Didn't found a listing in the collection '${collection}'`);
-
             }
         };
 
         await client.connect()
         await listListing(client)
     },
-    sort: async function (collection,field) {
+    sort: async function (collection, field) {
         async function listListing(client) {
 
             const cursor = await client.db("test").collection(collection).find({}).sort({
-                field: -1
+                [field]: -1
+            }).project({
+                "restaurant.id": 1,
+                "restaurant.name": 1,
+                [field] : 1
             });
 
             const results = await cursor.toArray();
+            module.exports.results = results
 
             if (results.length > 0) {
 
@@ -60,7 +66,8 @@ module.exports = {
     },
     insert: async function (collection, data) {
         async function createListing() {
-            const result = await client.db("test").collection(collection).insertOne(data);
+            const results = await client.db("test").collection(collection).insertOne(data);
+            module.exports.results = results
             console.log(`New listing created with the following id: ${result.insertedId}`);
         };
 
@@ -97,9 +104,13 @@ module.exports = {
 
         async function readListing() {
 
-            const result = await client.db("test").collection(collection).findOne({
+            const results = await client.db("test").collection(collection).findOne({
                 [field]: search
+            }).project({
+                "restaurant.id": 1,
+                "restaurant.name": 1,
             });
+            module.exports.results = results
             if (result) {
                 console.log(`Found a listing in the collection with the '${field}' '${search}':`);
                 console.log(result);
@@ -124,11 +135,14 @@ module.exports = {
 
             const cursor = await client.db("test").collection(collection).find({
                 [field]: search
-            }, {
-                // "restaurant.id": 1
+            }).project({
+                "restaurant.id": 1,
+                "restaurant.name": 1,
             });
 
             const results = await cursor.toArray();
+
+            module.exports.results = results
 
             if (results.length > 0) {
 
