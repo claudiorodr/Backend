@@ -32,23 +32,11 @@ module.exports = {
             }).project({
                 "restaurant.id": 1,
                 "restaurant.name": 1,
-                [field] : 1
+                [field]: 1
             });
 
             const results = await cursor.toArray();
             module.exports.results = results
-
-            if (results.length > 0) {
-
-                console.log(`Found a listing in the collection '${collection}'`);
-                results.forEach((result, i) => {
-                    console.log(result);
-
-                });
-            } else {
-                console.log(`Didn't found a listing in the collection '${collection}'`);
-
-            }
         };
 
         await client.connect()
@@ -58,7 +46,7 @@ module.exports = {
         async function createListing() {
             const results = await client.db("test").collection(collection).insertOne(data);
             module.exports.results = results
-            console.log(`New listing created with the following id: ${result.insertedId}`);
+            // console.log(`New listing created with the following id: ${result.insertedId}`);
         };
 
         try {
@@ -74,8 +62,8 @@ module.exports = {
         async function createListing() {
             const result = await client.db("test").collection(collection).insertMany(data);
 
-            console.log(`${result.insertedCount} new listing(s) created with the following id(s):`);
-            console.log(result.insertedIds);
+            // console.log(`${result.insertedCount} new listing(s) created with the following id(s):`);
+            // console.log(result.insertedIds);
         };
 
         try {
@@ -87,7 +75,6 @@ module.exports = {
             console.error(e)
         } finally {
             await client.close()
-
         }
     },
     findOne: async function (collection, field, search) {
@@ -101,13 +88,6 @@ module.exports = {
                 "restaurant.name": 1,
             });
             module.exports.results = results
-            if (result) {
-                console.log(`Found a listing in the collection with the '${field}' '${search}':`);
-                console.log(result);
-            } else {
-                console.log(`No listings found with '${field}' : '${search}'`);
-                console.log(result);
-            }
         };
 
         try {
@@ -133,17 +113,6 @@ module.exports = {
             const results = await cursor.toArray();
 
             module.exports.results = results
-
-            if (results.length > 0) {
-
-                console.log(`Found a listing in the collection with the '${field}' '${search}':`);
-                results.forEach((result, i) => {
-                    console.log(result);
-
-                });
-            } else {
-                console.log(`No listings found with '${field}' : '${search}'`);
-            }
         };
 
         await client.connect()
