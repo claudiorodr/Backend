@@ -1,3 +1,4 @@
+var db = require('../connection')
 const router = require('express').Router()
 const User = require('../model/User')
 const {
@@ -69,6 +70,16 @@ router.post('/login', async function (req, res) {
 
     res.header('auth-token', token).send(token)
 
+})
+
+router.get('/list', async (req, res) => {
+    await db.list('users')
+    res.send(db.results)
+})
+
+router.get('/popular', async (req, res) => {
+    await db.list('users')
+    res.send(db.results)
 })
 
 module.exports = router

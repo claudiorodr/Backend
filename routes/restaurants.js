@@ -3,7 +3,16 @@ const router = require('express').Router()
 
 // Lists all restaurants in BD
 router.get('/list', async (req, res) => {
-  await db.list('restaurants')
+  var page = parseInt(req.query.page)
+  var size = parseInt(req.query.size)
+  await db.list('restaurants', page, size)
+  res.send(db.results)
+})
+
+// Lists all restaurants in BD
+router.get('/search', async (req, res) => {
+  var search = req.query.search
+  await db.search('restaurants', search)
   res.send(db.results)
 })
 
@@ -24,8 +33,16 @@ router.get('/city/:id', async (req, res) => {
 
 // List all restaurant via rating
 router.get('/rating', async (req, res) => {
-  await db.sort('restaurants', 'restaurant.user_rating.aggregate_rating')
+  var page = parseInt(req.query.page)
+  var size = parseInt(req.query.size)
+  await db.sort('restaurants', 'restaurant.user_rating.aggregate_rating', page, size)
   res.send(db.results)
+})
+
+// List all restaurant via rating
+router.post('/review', async (req, res) => {
+  await db.update('restaurants')
+  res.send('Update success')
 })
 
 // List all restaurant via price tag

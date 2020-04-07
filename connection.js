@@ -8,13 +8,13 @@ const client = new MongoClient(uri, {
 })
 
 module.exports = {
-    list: async function (collection) {
-        async function listListing(client) {
+    list: async function (collection, page, limit) {
 
+        async function listListing(client) {
             const cursor = await client.db("test").collection(collection).find({}).project({
-                "restaurant.id": 1,
-                "restaurant.name": 1,
-            });
+
+                }).limit(limit * 1)
+                .skip((page - 1) * limit)
 
             const results = await cursor.toArray();
             module.exports.results = results
@@ -24,16 +24,39 @@ module.exports = {
         await client.connect()
         await listListing(client)
     },
-    sort: async function (collection, field) {
+    search: async function (collection, search) {
+        async function searchListing(client) {
+
+            //   await client.db("test").collection(collection).createIndex({
+            //       "restaurant.location.city": "text",
+            //       "restaurant.cuisines": "text",
+            //       "restaurant.highlights": "text",
+
+            //   }, function (err, result) {
+            //       console.log(result); 
+            //   });
+
+            const cursor = await client.db("test").collection(collection).find({
+                '$text': {
+                    '$search': search
+                }
+            }).project({})
+
+            const results = await cursor.toArray();
+            module.exports.results = results
+
+        };
+
+        await client.connect()
+        await searchListing(client)
+    },
+    sort: async function (collection, field, page, limit) {
         async function listListing(client) {
 
             const cursor = await client.db("test").collection(collection).find({}).sort({
-                [field]: -1
-            }).project({
-                "restaurant.id": 1,
-                "restaurant.name": 1,
-                [field]: 1
-            });
+                    [field]: -1
+                }).project({}).limit(limit * 1)
+                .skip((page - 1) * limit);
 
             const results = await cursor.toArray();
             module.exports.results = results
@@ -83,10 +106,7 @@ module.exports = {
 
             const results = await client.db("test").collection(collection).findOne({
                 [field]: search
-            }).project({
-                "restaurant.id": 1,
-                "restaurant.name": 1,
-            });
+            }).project({});
             module.exports.results = results
         };
 
@@ -105,14 +125,33 @@ module.exports = {
 
             const cursor = await client.db("test").collection(collection).find({
                 [field]: search
-            }).project({
-                "restaurant.id": 1,
-                "restaurant.name": 1,
-            });
+            }).project({});
 
             const results = await cursor.toArray();
 
             module.exports.results = results
+        };
+
+        await client.connect()
+        await readListing(client)
+    },
+    update: async function (collection) {
+
+        async function readListing(client) {
+
+            const cursor = await client.db("test").collection(collection).updateOne({
+                _id: '5e7d0ccd00ca5d41f8cb29b9'
+            }, {
+                $push: {
+                    'restaurant.all_reviews.reviews': {
+                        'review': ['This was a really good restaurant']
+                    }co
+                }
+            })
+
+            // const results = await cursor.toArray();
+
+            // module.exports.results = results
         };
 
         await client.connect()

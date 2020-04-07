@@ -21,7 +21,7 @@ app.use(express.urlencoded({
     extended: false
 }))
 
-app.use('/api/user', authRoute)
+app.use('/api/users', authRoute)
 app.use('/api/posts', postRoute)
 app.use('/api/restaurants', restaurantsRoute)
 app.listen(PORT, () => console.log("Server Up and Running"))
