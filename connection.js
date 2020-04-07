@@ -6,6 +6,7 @@ const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
+var ObjectId = require('mongodb').ObjectID
 
 module.exports = {
     list: async function (collection, page, limit) {
@@ -139,13 +140,13 @@ module.exports = {
 
         async function readListing(client) {
 
-            const cursor = await client.db("test").collection(collection).updateOne({
-                _id: '5e7d0ccd00ca5d41f8cb29b9'
+            const cursor = await client.db("test").collection(collection).findOneAndUpdate({
+                '_id': ObjectId("5e7d0ccd00ca5d41f8cb29b9")
             }, {
                 $push: {
                     'restaurant.all_reviews.reviews': {
                         'review': ['This was a really good restaurant']
-                    }co
+                    }
                 }
             })
 
