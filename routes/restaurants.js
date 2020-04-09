@@ -41,7 +41,10 @@ router.get('/rating', async (req, res) => {
 
 // List all restaurant via rating
 router.post('/review', async (req, res) => {
-  await db.update('restaurants')
+  var id = req.query.id
+  var review = req.query.review
+  var author = req.query.author
+  await db.update('restaurants', id, review, author)
   res.send('Update success')
 })
 

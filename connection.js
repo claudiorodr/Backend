@@ -32,6 +32,7 @@ module.exports = {
             //       "restaurant.location.city": "text",
             //       "restaurant.cuisines": "text",
             //       "restaurant.highlights": "text",
+            //       "restaurant.name": "text",
 
             //   }, function (err, result) {
             //       console.log(result); 
@@ -136,16 +137,19 @@ module.exports = {
         await client.connect()
         await readListing(client)
     },
-    update: async function (collection) {
+    update: async function (collection, id, review, author) {
 
         async function readListing(client) {
 
             const cursor = await client.db("test").collection(collection).findOneAndUpdate({
-                '_id': ObjectId("5e7d0ccd00ca5d41f8cb29b9")
+                '_id': ObjectId(id)
             }, {
                 $push: {
                     'restaurant.all_reviews.reviews': {
-                        'review': ['This was a really good restaurant']
+                        'review': {
+                            'author': author,
+                            'critic': review
+                        }
                     }
                 }
             })
