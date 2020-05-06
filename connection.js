@@ -1,11 +1,10 @@
-const {
-    MongoClient
-} = require('mongodb')
+const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://ClaudioRodrigues:GnLbKeQp5bEIKnN0@cluster0-qqotr.mongodb.net/test?retryWrites=true&w=majority"
 const client = new MongoClient(uri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology : true
 })
+
 var ObjectId = require('mongodb').ObjectID
 
 module.exports = {
@@ -80,7 +79,7 @@ module.exports = {
         } catch (e) {
             console.error(e)
         } finally {
-            await client.close()
+            // await client.close()
         }
     },
     insertMany: async function (collection, data) {
@@ -99,7 +98,7 @@ module.exports = {
         } catch (e) {
             console.error(e)
         } finally {
-            await client.close()
+            // await client.close()
         }
     },
     findOne: async function (collection, field, search) {
@@ -108,7 +107,7 @@ module.exports = {
 
             const results = await client.db("test").collection(collection).findOne({
                 [field]: search
-            }).project({});
+            });
             module.exports.results = results
         };
 
@@ -118,7 +117,7 @@ module.exports = {
         } catch (e) {
             console.error(e)
         } finally {
-            await client.close()
+            // await client.close()
         }
     },
     find: async function (collection, field, search) {
