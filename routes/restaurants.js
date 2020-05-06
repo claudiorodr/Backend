@@ -1,12 +1,11 @@
 var db = require('../connection')
 const router = require('express').Router()
-const verify = require('./verifyToken')
 
 // Lists all restaurants in BD
 router.get('/list', async (req, res) => {
   var page = parseInt(req.query.page)
   var size = parseInt(req.query.size)
-  await db.list('restaurants', page, size, 'restaurant.name')
+  await db.list('restaurants', page, size)
   res.send(db.results)
 })
 
@@ -26,7 +25,7 @@ router.get('/find/:id', async (req, res) => {
 
 // List restaurant via city
 router.get('/city/:id', async (req, res) => {
-  var id = req.params.id
+  var id = req.params.id;
   id = parseInt(id)
   await db.find('restaurants', 'restaurant.location.city_id', id)
   res.send(db.results)
@@ -51,7 +50,7 @@ router.post('/review', async (req, res) => {
 
 // List all restaurant via price tag
 router.get('/price/:id', async (req, res) => {
-  var id = req.params.id
+  var id = req.params.id;
   id = parseInt(id)
   await db.list('restaurants', 'restaurant.price_range', id)
   res.send(db.results)

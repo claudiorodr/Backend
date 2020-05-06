@@ -1,10 +1,11 @@
+var bd = require('./connection')
 const express = require('express')
+// var bodyParser = require('body-parser')
 const mongoose = require('mongoose');
-const dotenv = require('dotenv')
 const authRoute = require('./routes/auth')
 const postRoute = require('./routes/posts')
 const restaurantsRoute = require('./routes/restaurants')
-const reservationsRoute = require('./routes/reservation')
+const dotenv = require('dotenv')
 const PORT = process.env.PORT || 3001
 
 const app = express()
@@ -21,7 +22,6 @@ app.use(express.urlencoded({
 }))
 
 app.use('/api/users', authRoute)
-app.use('/api/restaurants', restaurantsRoute)
-app.use('/api/reservation', reservationsRoute)
 app.use('/api/posts', postRoute)
+app.use('/api/restaurants', restaurantsRoute)
 app.listen(PORT, () => console.log("Server Up and Running"))

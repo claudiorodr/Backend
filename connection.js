@@ -9,7 +9,8 @@ const client = new MongoClient(uri, {
 var ObjectId = require('mongodb').ObjectID
 
 module.exports = {
-    list: async function (collection, page, limit, project, project2) {
+    list: async function (collection, page, limit) {
+
         async function listListing(client) {
             const cursor = await client.db("test").collection(collection).find({}).project({
 
@@ -23,7 +24,6 @@ module.exports = {
 
         await client.connect()
         await listListing(client)
-
     },
     search: async function (collection, search) {
         async function searchListing(client) {
@@ -103,11 +103,12 @@ module.exports = {
         }
     },
     findOne: async function (collection, field, search) {
+
         async function readListing() {
 
             const results = await client.db("test").collection(collection).findOne({
                 [field]: search
-            });
+            }).project({});
             module.exports.results = results
         };
 
@@ -121,6 +122,7 @@ module.exports = {
         }
     },
     find: async function (collection, field, search) {
+
         async function readListing(client) {
 
             const cursor = await client.db("test").collection(collection).find({
@@ -136,6 +138,7 @@ module.exports = {
         await readListing(client)
     },
     update: async function (collection, id, review, author) {
+
         async function readListing(client) {
 
             const cursor = await client.db("test").collection(collection).findOneAndUpdate({
