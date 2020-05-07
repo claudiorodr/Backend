@@ -2,7 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://ClaudioRodrigues:GnLbKeQp5bEIKnN0@cluster0-qqotr.mongodb.net/test?retryWrites=true&w=majority"
 const client = new MongoClient(uri, {
     useNewUrlParser: true,
-    useUnifiedTopology : true
+    useUnifiedTopology: true
 })
 
 var ObjectId = require('mongodb').ObjectID
@@ -141,7 +141,8 @@ module.exports = {
         async function readListing(client) {
 
             const cursor = await client.db("test").collection(collection).findOneAndUpdate({
-                '_id': ObjectId(id)
+                // '_id': ObjectId(id)
+                'restaurant.id': id
             }, {
                 $push: {
                     'restaurant.all_reviews.reviews': {
@@ -154,11 +155,14 @@ module.exports = {
             })
 
             // const results = await cursor.toArray();
-
             // module.exports.results = results
         };
 
-        await client.connect()
-        await readListing(client)
+        try {
+            await client.connect()
+            await readListing(client)
+        } catch (e) {
+            console.error(e)
+        }
     }
 };
