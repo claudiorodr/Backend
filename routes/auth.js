@@ -35,7 +35,8 @@ router.post('/register', async (req, res) => {
     try {
         const savedUser = await user.save()
         res.send({
-            user: user._id
+            user_id: user._id,
+            user_name: user.name,
         })
     } catch (err) {
         res.status(400).send(err)
@@ -68,7 +69,7 @@ router.post('/login', async function (req, res) {
         _id: user._id
     }, process.env.TOKEN_SECRET)
 
-    res.header('auth-token', token).send(token)
+    res.header('auth-token', token).send({token : token, user_id : user.id ,user_name : user.name})
 
 })
 

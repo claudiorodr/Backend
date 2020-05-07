@@ -41,11 +41,12 @@ router.get('/rating', async (req, res) => {
 
 // List all restaurant via rating
 router.post('/review', async (req, res) => {
-  var id = req.query.id
-  var review = req.query.review
-  var author = req.query.author
+  var id = req.body.id
+  var review = req.body.critic
+  var author = req.body.author
+  console.log(req);
   await db.update('restaurants', id, review, author)
-  res.send('Update success')
+  res.send('Review added successfully')
 })
 
 // List all restaurant via price tag
