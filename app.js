@@ -3,8 +3,8 @@ const express = require('express')
 // var bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const authRoute = require('./routes/auth')
-const postRoute = require('./routes/posts')
 const restaurantsRoute = require('./routes/restaurants')
+const reservationsRoute = require('./routes/reservations')
 const dotenv = require('dotenv')
 const PORT = process.env.PORT || 3001
 
@@ -22,6 +22,6 @@ app.use(express.urlencoded({
 }))
 
 app.use('/api/users', authRoute)
-app.use('/api/posts', postRoute)
 app.use('/api/restaurants', restaurantsRoute)
+app.use('/api/reservations', reservationsRoute)
 app.listen(PORT, () => console.log("Server Up and Running"))
