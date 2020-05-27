@@ -10,21 +10,24 @@ router.post('/new', async (req, res) => {
     var number_guests = req.body.number_guests
     var date = req.body.date
     var time = req.body.time
-    var data = {
-        "user_id" : user_id,
-        "restaurant_id" : restaurant_id,
-        "restaurant_name": restaurant_name,
-        "restaurant_address": restaurant_address,
-        "date" : date,
-        "time" : time,
-        "number_guests" : number_guests
-    }
-    await db.insert('reservation', data)
-    
+
     if (!parseInt(number_guests)) {
         res.status(500).send('Please insert number of guests')
     }
+    if (time == "") {
+        res.status(500).send('Please insert the time of the reservation')
+    }
     else {
+        var data = {
+            "user_id" : user_id,
+            "restaurant_id" : restaurant_id,
+            "restaurant_name": restaurant_name,
+            "restaurant_address": restaurant_address,
+            "date" : date,
+            "time" : time,
+            "number_guests" : number_guests
+        }
+        await db.insert('reservation', data)
         res.send('Reservation made successfully')
     }
 })
@@ -35,5 +38,14 @@ router.get('/user', async (req, res) => {
     await db.find('reservation', 'user_id', user_id)
     res.send(db.results)
 })
+
+router.delete('/delete', async (req, res) => {
+    var _id = req.body._id
+
+    await db.delete('reservation', '_id', _id)
+    res.send(db.results)
+})
+
+
 
 module.exports = router

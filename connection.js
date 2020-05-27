@@ -24,6 +24,24 @@ module.exports = {
         await client.connect()
         await listListing(client)
     },
+    list2: async function (collection,field, search, page, limit) {
+
+        async function listListing(client) {
+            const cursor = await client.db("test").collection(collection).find({
+                [field]: search
+            }).project({
+
+                }).limit(limit * 1)
+                .skip((page - 1) * limit)
+
+            const results = await cursor.toArray();
+            module.exports.results = results
+
+        };
+
+        await client.connect()
+        await listListing(client)
+    },
     search: async function (collection, search) {
         async function searchListing(client) {
 
@@ -65,6 +83,24 @@ module.exports = {
 
         await client.connect()
         await listListing(client)
+    },
+    delete: async function (collection, field, search) {
+        async function createListing() {
+            const results = await client.db("test").collection(collection).deleteOne({
+                [field]: ObjectId(search)
+            });
+            module.exports.results = results
+            // console.log(`New listing created with the following id: ${result.insertedId}`);
+        };
+
+        try {
+            await client.connect()
+            await createListing(client)
+        } catch (e) {
+            console.error(e)
+        } finally {
+            // await client.close()
+        }
     },
     insert: async function (collection, data) {
         async function createListing() {
