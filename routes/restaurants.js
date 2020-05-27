@@ -44,7 +44,6 @@ router.post('/review', async (req, res) => {
   var id = req.body.id
   var review = req.body.critic
   var author = req.body.author
-  console.log(req);
   await db.update('restaurants', id, review, author)
   res.send('Review added successfully')
 })
@@ -53,13 +52,17 @@ router.post('/review', async (req, res) => {
 router.get('/price/:id', async (req, res) => {
   var id = req.params.id;
   id = parseInt(id)
-  await db.list('restaurants', 'restaurant.price_range', id)
+  var page = parseInt(req.query.page)
+  var size = parseInt(req.query.size)
+  await db.list2('restaurants', 'restaurant.price_range', id, page, size)
   res.send(db.results)
 })
 
 // List restaurants by popularity
 router.get('/popular', async (req, res) => {
-  await db.sort('restaurants', 'restaurant.user_rating.votes')
+  var page = parseInt(req.query.page)
+  var size = parseInt(req.query.size)
+  await db.sort('restaurants', 'restaurant.user_rating.votes', page, size)
   res.send(db.results)
 })
 
