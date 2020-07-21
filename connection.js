@@ -24,12 +24,12 @@ module.exports = {
         await client.connect()
         await listListing(client)
     },
-    list2: async function (collection,field, search, page, limit) {
+    list2: async function (collection, field, search, page, limit) {
 
         async function listListing(client) {
             const cursor = await client.db("test").collection(collection).find({
-                [field]: search
-            }).project({
+                    [field]: search
+                }).project({
 
                 }).limit(limit * 1)
                 .skip((page - 1) * limit)

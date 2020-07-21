@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
         email: req.body.email,
         password: hashedPassword
     })
-    
+
     try {
         const savedUser = await user.save()
         res.send({
@@ -44,9 +44,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.post('/login', async function (req, res) {
-    const {
-        error
-    } = loginValidation(req.body)
+    const { error } = loginValidation(req.body)
 
     if (error) {
         return res.status(400).send(error.details[0].message)
@@ -69,7 +67,11 @@ router.post('/login', async function (req, res) {
         _id: user._id
     }, process.env.TOKEN_SECRET)
 
-    res.header('auth-token', token).send({token : token, user_id : user.id ,user_name : user.name})
+    res.header('auth-token', token).send({
+        token: token,
+        user_id: user.id,
+        user_name: user.name
+    })
 
 })
 

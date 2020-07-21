@@ -16,16 +16,15 @@ router.post('/new', async (req, res) => {
     }
     if (time == "") {
         res.status(500).send('Please insert the time of the reservation')
-    }
-    else {
+    } else {
         var data = {
-            "user_id" : user_id,
-            "restaurant_id" : restaurant_id,
+            "user_id": user_id,
+            "restaurant_id": restaurant_id,
             "restaurant_name": restaurant_name,
             "restaurant_address": restaurant_address,
-            "date" : date,
-            "time" : time,
-            "number_guests" : number_guests
+            "date": date,
+            "time": time,
+            "number_guests": number_guests
         }
         await db.insert('reservation', data)
         res.send('Reservation made successfully')
@@ -34,7 +33,7 @@ router.post('/new', async (req, res) => {
 
 router.get('/user', async (req, res) => {
     var user_id = req.query.user_id
-    
+
     await db.find('reservation', 'user_id', user_id)
     res.send(db.results)
 })
